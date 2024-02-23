@@ -1,26 +1,28 @@
 package com.api.apicontroleuso.controller;
 
-import com.api.apicontroleuso.dto.LoginDto;
-import com.api.apicontroleuso.service.LoginService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.header.Header;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.api.apicontroleuso.dto.AuthenticationResponse;
+import com.api.apicontroleuso.dto.LoginRequest;
 
-@Controller
+import com.api.apicontroleuso.dto.ResgistroRequest;
+import com.api.apicontroleuso.service.AuthenticationService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController @RequestMapping("/api/v1/login") @RequiredArgsConstructor
 public class LoginController {
 
-    @Autowired
-    private LoginService loginService;
+    private final AuthenticationService authenticationService;
 
-    private String LoginEntity;
-    @PostMapping(path = "/authentication")
-    public String authentication(@RequestBody LoginDto login){
-        loginService.logar(login);
-        //gerar Token
-        return null;
+    @PostMapping(path = "/registrar")
+    public ResponseEntity<AuthenticationResponse> registro(
+            @RequestBody ResgistroRequest registro) {
+            return ResponseEntity.ok(authenticationService.registro(registro));
     }
 
+    @PostMapping(path = "")
+    public ResponseEntity<AuthenticationResponse> login(
+            @RequestBody LoginRequest login){
+        return ResponseEntity.ok(authenticationService.login(login));
+    }
 }
