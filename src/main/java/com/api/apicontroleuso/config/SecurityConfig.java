@@ -14,15 +14,28 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig{
+public class SecurityConfig  {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+
+private static final String[] AUTH_WHITELIST = {
+        "/api/v1/login/**",
+        "/v3/api-docs/**",
+        "/v3/api-docs.yaml",
+        "/swagger-ui/**",
+        "/swagger-ui.html"
+};
+
+
 
     @Bean
     public SecurityFilterChain securityFileterChain(HttpSecurity http) throws Exception {
@@ -33,7 +46,7 @@ public class SecurityConfig{
 
                 // Authorization rules
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/login/**").permitAll()  // Allow unauthenticated access for specific paths
+                        .requestMatchers(AUTH_WHITELIST).permitAll()  // Allow unauthenticated access for specific paths
                         .anyRequest().authenticated()      // Require authentication for all other requests
                 )
 
