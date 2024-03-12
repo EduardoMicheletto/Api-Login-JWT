@@ -6,6 +6,7 @@ import com.api.apicontroleuso.dto.LoginRequest;
 import com.api.apicontroleuso.dto.ResgistroRequest;
 import com.api.apicontroleuso.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class LoginController {
     @PostMapping(path = "/registrar")
     public ResponseEntity<AuthenticationResponse> registro(
             @RequestBody ResgistroRequest registro) {
-            return ResponseEntity.ok(authenticationService.registro(registro));
+            return new ResponseEntity<>(authenticationService.registro(registro), HttpStatus.CREATED);
     }
 
     @PostMapping(path = "")
